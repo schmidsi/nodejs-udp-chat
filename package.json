@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -r @std/esm server.js"
+    "start": "node -r @std/esm server.js",
+    "client": "node -r @std/esm client.js"
   },
   "@std/esm": "js",
   "keywords": [],
