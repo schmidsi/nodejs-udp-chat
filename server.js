@@ -1,21 +1,48 @@
 import dgram from 'dgram';
+import readline from 'readline';
 
-const discoveryServer = dgram.createSocket('udp4');
+const socket = dgram.createSocket('udp4');
 
-discoveryServer.on('error', err => {
-  console.log(`discoveryServer error:\n${err.stack}`);
-  discoveryServer.close();
+socket.on('error', err => {
+  console.log(`socket error:\n${err.stack}`);
+  socket.close();
 });
 
-discoveryServer.on('message', (msg, rinfo) => {
-  console.log(
-    `discoveryServer got: ${msg} from ${rinfo.address}:${rinfo.port}`,
-  );
+socket.on('message', (msg, rinfo) => {
+  rl.clearLine(process.stdout, 0);
+  console.log(`socket got: ${msg} from ${rinfo.address}:${rinfo.port}`);
+  rl.prompt();
 });
 
-discoveryServer.on('listening', () => {
-  const address = discoveryServer.address();
-  console.log(`discoveryServer listening ${address.address}:${address.port}`);
+socket.on('listening', () => {
+  const address = socket.address();
+  console.log(`socket listening ${address.address}:${address.port}`);
+  rl.prompt();
 });
 
-discoveryServer.bind(1025);
+socket.bind(1025);
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  prompt: '> ',
+});
+
+rl
+  .on('line', line => {
+    switch (line.trim()) {
+      case 'hello':
+        console.log('world!');
+        break;
+      default:
+        console.log(`Say what? I might have heard '${line.trim()}'`);
+        break;
+    }
+    rl.prompt();
+  })
+  .on('close', () => {
+    console.log('Have a great day!');
+    process.exit(0);
+  });
+
+// socket.send('Hallo welt', 1025, 'localhost');
