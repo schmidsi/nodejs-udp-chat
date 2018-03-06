@@ -1,4 +1,4 @@
-const dgram = require('dgram');
+import dgram from 'dgram';
 
 const discoveryServer = dgram.createSocket('udp4');
 
